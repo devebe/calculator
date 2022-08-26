@@ -1,3 +1,17 @@
+function operate (firstOperand,operatorType,secondOperand) {
+    switch (operatorType) {
+        case "add":
+            add(firstOperand,secondOperand);
+        case "subtract":
+            subtract(firstOperand,secondOperand);
+        case "multiply":
+            multiply(firstOperand,secondOperand);
+        case "divide":
+            divide(firstOperand,secondOperand);
+    }
+}
+
+
 function add(...args) {
     let result = 0;
     for (let i = 0; i < args.length; i++) {
