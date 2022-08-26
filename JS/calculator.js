@@ -1,14 +1,20 @@
 function operate (firstOperand,operatorType,secondOperand) {
+    let result;
     switch (operatorType) {
         case "add":
-            add(firstOperand,secondOperand);
+            result = add(firstOperand,secondOperand);
+            break;
         case "subtract":
-            subtract(firstOperand,secondOperand);
+            result = subtract(firstOperand,secondOperand);
+            break;
         case "multiply":
-            multiply(firstOperand,secondOperand);
+            result = multiply(firstOperand,secondOperand);
+            break;
         case "divide":
-            divide(firstOperand,secondOperand);
+            result = divide(firstOperand,secondOperand);
+            break;
     }
+    return result;
 }
 
 
@@ -51,3 +57,5 @@ console.log(subtract(100,10,15,20,25));
 console.log(multiply(3,3,2,2,1));
 
 console.log(divide(40,2,2));
+
+console.log(operate(10,"add",3));
