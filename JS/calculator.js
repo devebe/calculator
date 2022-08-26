@@ -8,13 +8,37 @@ createHTML('div.keypad','div','operators');
 createNumPadButtons(10);
 createOperatorButtons('÷','x','-','+');
 
-const display = document.querySelector('div.screen');
-display.textContent = 1250045
+const numberInputs = document.querySelectorAll("button.number ,button.operator");
+let displayValue = document.querySelector('div.screen');
+let expressionArray = [];
+numberInputs.forEach(number => {
+    number.addEventListener('click', e => {
+        displayValue.textContent += e.target.id;
+        if (e.target.id == '+') {
+            operatorType = "+"
+        }
+        expressionArray.push(e.target.id);
+    });
+});
+
+// Listen for operator click as this can only be done once
+// Listen for evaluation click
+
+
+
+
+
+
+
+
+
+
+
 
 function createNumPadButtons(numberOf) {
     for (let i = 0; i < numberOf; i++) {
         if (numberOf - i == 1 ) {
-            createHTML('div.characters','button',`=-sign`,'number',1,`=`);
+            createHTML('div.characters','button',`=`,'number',1,`=`);
             createHTML('div.characters','button',`.`,'number',1,`.`);
         }
         createHTML('div.characters','button',`${numberOf - i - 1}`,'number',1,`${numberOf - i - 1}`);
@@ -47,16 +71,16 @@ function createHTML (parentNode, childNode = 'div', idName, className = idName, 
 function operate (firstOperand,operatorType,secondOperand) {
     let result;
     switch (operatorType) {
-        case "add":
+        case "+":
             result = add(firstOperand,secondOperand);
             break;
-        case "subtract":
+        case "-":
             result = subtract(firstOperand,secondOperand);
             break;
-        case "multiply":
+        case "x":
             result = multiply(firstOperand,secondOperand);
             break;
-        case "divide":
+        case "÷":
             result = divide(firstOperand,secondOperand);
             break;
     }
@@ -94,13 +118,3 @@ function divide(...args) {
     }
     return result;
 }
-
-console.log(add(5,10,15,16,22));
-
-console.log(subtract(100,10,15,20,25));
-
-console.log(multiply(3,3,2,2,1));
-
-console.log(divide(40,2,2));
-
-console.log(operate(10,"divide",3));
