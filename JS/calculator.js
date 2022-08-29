@@ -1,53 +1,58 @@
-createHTML('body','div','container');
-createHTML('div.container','div','screen');
-createHTML('div.container','div','controls');
-createControlButtons('on','off','clear');
-createHTML('div.container','div','keypad');
-createHTML('div.keypad','div','characters');
-createHTML('div.keypad','div','operators');
-createNumPadButtons(10);
-createOperatorButtons(' ÷ ',' x ',' - ',' + ');
-
-const keyInputs = document.querySelectorAll('button.number, button.decimal, button.operator');
+createCalculatorHTML();
+const operatorInputs = document.querySelectorAll('button.operator');
 let displayValue = document.querySelector('div.screen');
+executeCalculator();
 
-function execute() {
+function createCalculatorHTML() { // Creates the HTML for Calculator
+    createHTML('body','div','container');
+    createHTML('div.container','div','screen');
+    createHTML('div.container','div','controls');
+    createControlButtons('on','off','clear');
+    createHTML('div.container','div','keypad');
+    createHTML('div.keypad','div','characters');
+    createHTML('div.keypad','div','operators');
+    createNumPadButtons(10);
+    createOperatorButtons(' ÷ ',' x ',' - ',' + ');
+}
+
+function executeCalculator() {
+    setInput(); // Captures input
+    evaluate(); // Evaluates input when clicking '='
+    clearScreen(); // Allows for clearing the screen
+}
+
+function setInput() {
+    const keyInputs = document.querySelectorAll('button.number, button.decimal, button.operator');
+    const dotInput = document.querySelector('button.decimal');
     keyInputs.forEach(key => {
-        key.addEventListener('click', e => {
+        key.addEventListener('click', e => {  
             if (e.target.id === ' + ' || e.target.id === ' - ' || e.target.id === ' x ' || e.target.id === ' ÷ ') {
-                const operatorInputs = document.querySelectorAll('button.operator');
                 operatorInputs.forEach(operator => {
                     operator.disabled = true;
                 });
+                dotInput.disabled = false;
+            }
+            if (e.target.id === '.') {
+                dotInput.disabled = true;
             }
             displayValue.textContent += e.target.id;
         });
     });
-    
+}
+
+function evaluate() {
     let evaluation = document.querySelector('button.evaluate');
     evaluation.addEventListener('click', e => {
         let result = operate(parseFloat(displayValue.textContent.split(' ')[0]), displayValue.textContent.split(' ')[1], parseFloat(displayValue.textContent.split(' ')[2]));
-        console.log(result);
-        displayValue.textContent = result;
+        displayValue.textContent = +result.toFixed(6);
+        operatorInputs.forEach(operator => {operator.disabled = false;});
     });
 }
 
-execute();
-
-
-// Listen for operator click as this can only be done once
-// Listen for evaluation click
-
-
-
-
-
-
-
-
-
-
-
+function clearScreen() {
+    let clearScreen = document.querySelector('button#clear');
+    clearScreen.addEventListener('click', e => {displayValue.textContent = '';});
+}
 
 function createNumPadButtons(numberOf) {
     for (let i = 0; i < numberOf; i++) {
