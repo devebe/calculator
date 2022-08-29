@@ -40,6 +40,7 @@ function setInput() {
             displayValue.textContent += e.target.id;
         });
     });
+    
 }
 
 function deleteInput() {
