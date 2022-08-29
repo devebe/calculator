@@ -6,7 +6,9 @@ executeCalculator();
 
 function createCalculatorHTML() { // Creates the HTML for Calculator
     createHTML('body','div','container');
-    createHTML('div.container','div','screen');
+    createHTML('div.container','div','top');
+    createHTML('div.top','div','brand','brand',1,'Odin Calculator Pro 91');
+    createHTML('div.top','div','screen');
     createHTML('div.container','div','controls');
     createControlButtons('on','del','clear');
     createHTML('div.container','div','keypad');
@@ -40,7 +42,23 @@ function setInput() {
             displayValue.textContent += e.target.id;
         });
     });
-    
+    document.addEventListener('keydown', e => {
+        const regExNumberFormat = /^[0-9]$/;
+        if (regExNumberFormat.test(e.key)) {
+            displayValue.textContent += +e.key;
+        }
+        if (e.key === '+' || e.key === '-' || e.key === 'x' || e.key === '÷') {
+            operatorInputs.forEach(operator => {
+                operator.disabled = true;
+            });
+            dotInput.disabled = false;
+            displayValue.textContent += ' '+e.key+' ';
+        }
+        if (e.key === '.') {
+            dotInput.disabled = true;
+            displayValue.textContent += e.key;
+        }
+    });
 }
 
 function deleteInput() {
@@ -49,6 +67,14 @@ function deleteInput() {
             operatorInputs.forEach(operator => {operator.disabled = false;});
         }
         displayValue.textContent = displayValue.textContent.slice(0,(displayValue.textContent.length - 1));
+    })
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Backspace') {
+            if (displayValue.textContent[displayValue.textContent.length - 1] === ' ') {
+                operatorInputs.forEach(operator => {operator.disabled = false;});
+            }
+            displayValue.textContent = displayValue.textContent.slice(0,(displayValue.textContent.length - 1));
+        }
     })
 }
 
@@ -65,6 +91,13 @@ function evaluate() {
         }
         operatorInputs.forEach(operator => {operator.disabled = false;});
     });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            let result = operate(parseFloat(displayValue.textContent.split(' ')[0]), displayValue.textContent.split(' ')[1], parseFloat(displayValue.textContent.split(' ')[2]));
+            displayValue.textContent = +result.toFixed(4);
+        }
+        operatorInputs.forEach(operator => {operator.disabled = false;});
+    })
 }
 
 function clearScreen() {
@@ -74,7 +107,14 @@ function clearScreen() {
         dotInput.disabled = false;
         operatorInputs.forEach(operator => {operator.disabled = false;});
     });
-    
+    document.addEventListener('keydown', e => {
+        if (e.key === ' ' || e.key === 'c') {
+            displayValue.textContent = '';
+            dotInput.disabled = false;
+            operatorInputs.forEach(operator => {operator.disabled = false;});
+        }
+        console.log(e.key);
+    })
 }
 
 function createNumPadButtons(numberOf) {
