@@ -1,5 +1,6 @@
 createCalculatorHTML();
 const operatorInputs = document.querySelectorAll('button.operator');
+const dotInput = document.querySelector('button.decimal');
 let displayValue = document.querySelector('div.screen');
 executeCalculator();
 
@@ -7,7 +8,7 @@ function createCalculatorHTML() { // Creates the HTML for Calculator
     createHTML('body','div','container');
     createHTML('div.container','div','screen');
     createHTML('div.container','div','controls');
-    createControlButtons('on','off','clear');
+    createControlButtons('on','del','clear');
     createHTML('div.container','div','keypad');
     createHTML('div.keypad','div','characters');
     createHTML('div.keypad','div','operators');
@@ -17,6 +18,7 @@ function createCalculatorHTML() { // Creates the HTML for Calculator
 
 function executeCalculator() {
     setInput(); // Captures input
+    deleteInput(); // Allows user to delete input
     evaluate(); // Evaluates input when clicking '='
     clearScreen(); // Allows for clearing the screen
 }
@@ -40,18 +42,38 @@ function setInput() {
     });
 }
 
+function deleteInput() {
+    document.getElementById('del').addEventListener('click', e => {
+        if (displayValue.textContent[displayValue.textContent.length - 1] === ' ') {
+            operatorInputs.forEach(operator => {operator.disabled = false;});
+        }
+        displayValue.textContent = displayValue.textContent.slice(0,(displayValue.textContent.length - 1));
+    })
+}
+
 function evaluate() {
     let evaluation = document.querySelector('button.evaluate');
     evaluation.addEventListener('click', e => {
         let result = operate(parseFloat(displayValue.textContent.split(' ')[0]), displayValue.textContent.split(' ')[1], parseFloat(displayValue.textContent.split(' ')[2]));
-        displayValue.textContent = +result.toFixed(6);
+        if (result === NaN || result === Infinity) {
+            alert('You cannot divide by 0, it will break the internet.');
+            displayValue.textContent = '';
+        }
+        else {
+            displayValue.textContent = +result.toFixed(4);
+        }
         operatorInputs.forEach(operator => {operator.disabled = false;});
     });
 }
 
 function clearScreen() {
     let clearScreen = document.querySelector('button#clear');
-    clearScreen.addEventListener('click', e => {displayValue.textContent = '';});
+    clearScreen.addEventListener('click', e => {
+        displayValue.textContent = '';
+        dotInput.disabled = false;
+        operatorInputs.forEach(operator => {operator.disabled = false;});
+    });
+    
 }
 
 function createNumPadButtons(numberOf) {
