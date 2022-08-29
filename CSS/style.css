@@ -1,3 +1,10 @@
+
+
+@font-face {
+    font-family: 'Casio fx-9860GII','Courier New', Courier, monospace;;
+    src: url(./Assets/casio-fx-9860gii.ttf);
+}
+
 * {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
