@@ -11,20 +11,28 @@ createOperatorButtons(' ÷ ',' x ',' - ',' + ');
 const keyInputs = document.querySelectorAll('button.number, button.decimal, button.operator');
 let displayValue = document.querySelector('div.screen');
 
-
-keyInputs.forEach(key => {
-    key.addEventListener('click', e => {
-        if (e.target.id === ' + ' || e.target.id === ' - ' || e.target.id === ' x ' || e.target.id === ' ÷ ') {
-            const operatorInputs = document.querySelectorAll('button.operator');
-            operatorInputs.forEach(operator => {
-                operator.disabled = true;
-            });
-        }
-        displayValue.textContent += e.target.id;
+function execute() {
+    keyInputs.forEach(key => {
+        key.addEventListener('click', e => {
+            if (e.target.id === ' + ' || e.target.id === ' - ' || e.target.id === ' x ' || e.target.id === ' ÷ ') {
+                const operatorInputs = document.querySelectorAll('button.operator');
+                operatorInputs.forEach(operator => {
+                    operator.disabled = true;
+                });
+            }
+            displayValue.textContent += e.target.id;
+        });
     });
-});
+    
+    let evaluation = document.querySelector('button.evaluate');
+    evaluation.addEventListener('click', e => {
+        let result = operate(parseFloat(displayValue.textContent.split(' ')[0]), displayValue.textContent.split(' ')[1], parseFloat(displayValue.textContent.split(' ')[2]));
+        console.log(result);
+        displayValue.textContent = result;
+    });
+}
 
-let calculation = document.querySelector('div.screen').textContent.split(' ');
+execute();
 
 
 // Listen for operator click as this can only be done once
@@ -79,18 +87,17 @@ function operate (firstOperand,operatorType,secondOperand) {
     switch (operatorType) {
         case "+":
             result = add(firstOperand,secondOperand);
-            break;
+            return result;
         case "-":
             result = subtract(firstOperand,secondOperand);
-            break;
+            return result;
         case "x":
             result = multiply(firstOperand,secondOperand);
-            break;
+            return result;
         case "÷":
             result = divide(firstOperand,secondOperand);
-            break;
+            return result;
     }
-    return result;
 }
 
 function add(...args) {
