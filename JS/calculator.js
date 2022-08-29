@@ -6,20 +6,26 @@ createHTML('div.container','div','keypad');
 createHTML('div.keypad','div','characters');
 createHTML('div.keypad','div','operators');
 createNumPadButtons(10);
-createOperatorButtons('÷','x','-','+');
+createOperatorButtons(' ÷ ',' x ',' - ',' + ');
 
-const numberInputs = document.querySelectorAll("button.number ,button.operator");
+const keyInputs = document.querySelectorAll('button.number, button.decimal, button.operator');
 let displayValue = document.querySelector('div.screen');
-let expressionArray = [];
-numberInputs.forEach(number => {
-    number.addEventListener('click', e => {
-        displayValue.textContent += e.target.id;
-        if (e.target.id == '+') {
-            operatorType = "+"
+
+
+keyInputs.forEach(key => {
+    key.addEventListener('click', e => {
+        if (e.target.id === ' + ' || e.target.id === ' - ' || e.target.id === ' x ' || e.target.id === ' ÷ ') {
+            const operatorInputs = document.querySelectorAll('button.operator');
+            operatorInputs.forEach(operator => {
+                operator.disabled = true;
+            });
         }
-        expressionArray.push(e.target.id);
+        displayValue.textContent += e.target.id;
     });
 });
+
+let calculation = document.querySelector('div.screen').textContent.split(' ');
+
 
 // Listen for operator click as this can only be done once
 // Listen for evaluation click
@@ -38,8 +44,8 @@ numberInputs.forEach(number => {
 function createNumPadButtons(numberOf) {
     for (let i = 0; i < numberOf; i++) {
         if (numberOf - i == 1 ) {
-            createHTML('div.characters','button',`=`,'number',1,`=`);
-            createHTML('div.characters','button',`.`,'number',1,`.`);
+            createHTML('div.characters','button',`=`,'evaluate',1,`=`);
+            createHTML('div.characters','button',`.`,'decimal',1,`.`);
         }
         createHTML('div.characters','button',`${numberOf - i - 1}`,'number',1,`${numberOf - i - 1}`);
     }
